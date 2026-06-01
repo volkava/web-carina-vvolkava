@@ -24,4 +24,19 @@ public class ProductDetailsPage extends AbstractPage {
     public String getProductSpecsText() {
         return productDescriptionSpecs.getText().trim();
     }
+
+    public String getDetailsDescriptionText() {
+        return getProductSpecsText();
+    }
+
+    private String expectedDescriptionSnippet = "";
+
+    public void setExpectedDescriptionSnippet(String snippet) {
+        this.expectedDescriptionSnippet = snippet;
+    }
+
+    public String getExpectedDescriptionSnippet() {
+        return this.expectedDescriptionSnippet;
+    }
+
 }

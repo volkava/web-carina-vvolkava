@@ -9,17 +9,23 @@ import org.openqa.selenium.support.FindBy;
 
 public class ProductItem extends AbstractUIObject {
 
-    @FindBy(xpath = ".//span[contains(@class, 'catalog-product__title')]//span[not(contains(@class, 'icon'))]")
+    @FindBy(xpath = ".//h3[contains(@class, 'catalog-form__description')]//a[contains(@class, 'catalog-form__link')]")
     private ExtendedWebElement title;
 
-    @FindBy(xpath = ".//div[contains(@class, 'catalog-product__image')]//img")
+    @FindBy(xpath = ".//img[contains(@class, 'catalog-form__image')]")
     private ExtendedWebElement photo;
 
-    @FindBy(xpath = ".//a[contains(@href, '/prices') or contains(@class, 'catalog-product__price')]")
+    @FindBy(xpath = ".//a[contains(@href, '/prices')]")
     private ExtendedWebElement price;
 
-    @FindBy(xpath = ".//a[contains(@href, '/reviews') or contains(@class, 'catalog-product__rating')]")
+    @FindBy(xpath = ".//a[contains(@class, 'catalog-form__rating')]")
     private ExtendedWebElement rating;
+
+    @FindBy(xpath = ".//label[contains(@class, 'catalog-form__checkbox-label')]")
+    private ExtendedWebElement compareCheckbox;
+
+    @FindBy(xpath = ".//div[contains(@class, 'catalog-form__parameter-flex')]")
+    private ExtendedWebElement descriptionSnippet;
 
     public ProductItem(WebDriver driver, SearchContext searchContext) {
         super(driver, searchContext);
@@ -38,15 +44,27 @@ public class ProductItem extends AbstractUIObject {
     }
 
     public boolean isTemplateComplete() {
-        return title.isElementPresent(2) &&
-                photo.isElementPresent(2) &&
-                price.isElementPresent(2);
+        boolean hasTitle = title.isElementPresent(2);
+        boolean hasPhoto = photo.isElementPresent(2);
+        boolean hasPrice = price.isElementPresent(2);
+
+        return hasTitle && hasPhoto && hasPrice;
+    }
+
+    public void toggleCompare() {
+        compareCheckbox.clickByJs();
     }
 
     public ProductDetailsPage clickProductTitle() {
         title.scrollTo();
         title.click();
-
         return new ProductDetailsPage(getDriver());
+    }
+
+    public String getDescriptionText() {
+        if(descriptionSnippet.isElementPresent(5)) {
+            return descriptionSnippet.getText().trim();
+        }
+        return "";
     }
 }
